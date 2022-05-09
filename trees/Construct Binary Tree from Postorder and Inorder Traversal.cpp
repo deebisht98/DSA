@@ -24,9 +24,9 @@ void inOrder(struct Node *root)
     inOrder(root->right);
 }
 
-struct Node *buildTree(vector<int> &preorder, vector<int> &inorder, int start, int end)
+struct Node *buildTree(vector<int> &postorder, vector<int> &inorder, int start, int end)
 {
-    static int curr = 0;
+    static int curr = postorder.size() - 1;
 
     if (start > end)
     {
@@ -34,25 +34,25 @@ struct Node *buildTree(vector<int> &preorder, vector<int> &inorder, int start, i
     }
 
     int pos = 0;
-    while (inorder[pos] != preorder[curr])
+    while (inorder[pos] != postorder[curr])
     {
         pos++;
     }
 
-    curr++;
+    curr--;
 
     struct Node *root = new Node(inorder[pos]);
-    root->left = buildTree(preorder, inorder, start, pos - 1);
-    root->right = buildTree(preorder, inorder, pos + 1, end);
+    root->right = buildTree(postorder, inorder, pos + 1, end);
+    root->left = buildTree(postorder, inorder, start, pos - 1);
     return root;
 }
 
 int main()
 {
-    vector<int> preorder = {1, 2, 4, 3, 5};
+    vector<int> postorder = {1, 2, 4, 3, 5};
     vector<int> inorder = {4, 2, 1, 5, 3};
 
-    struct Node *root = buildTree(preorder, inorder, 0, inorder.size() - 1);
+    struct Node *root = buildTree(postorder, inorder, 0, inorder.size() - 1);
 
     inOrder(root);
     return 0;
