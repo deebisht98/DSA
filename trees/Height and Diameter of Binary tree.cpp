@@ -27,7 +27,7 @@ int diameter(Node *root)
 {
     if (root == NULL)
         return 0;
-    int currDiameter = maxHeight(root->left) + maxHeight(root->right) + 1;
+    int currDiameter = maxHeight(root->left) + maxHeight(root->right);
     int leftDiameter = diameter(root->left);
     int rightDiameter = diameter(root->right);
 
@@ -38,19 +38,18 @@ int diameter(Node *root)
 // here we'll be carrying one extra pointer so that we don't
 // have to call everytime one extra function
 
-int calcDiameter(Node *root, int *height)
+int calcDiameter(Node *root, int &d)
 {
     if (root == NULL)
     {
-        *height = 0;
         return 0;
     }
-    int lh = 0, rh = 0;
-    int lDiameter = calcDiameter(root->left, &lh);
-    int rDiameter = calcDiameter(root->right, &rh);
-    int currDiameter = lh + rh + 1;
-    *height = max(lh, rh) + 1;
-    return max(currDiameter, max(lDiameter, rDiameter));
+    int lh = calcDiameter(root->left, d);
+    int rh = calcDiameter(root->right, d);
+
+    int curr_diameter = lh + rh;
+    d = max(d, curr_diameter);
+    return 1 + max(lh, rh);
 }
 
 int main()
@@ -63,8 +62,8 @@ int main()
 
     cout << "Height of binary tree: " << maxHeight(root);
     cout << "\nDiameter of binary tree: " << diameter(root);
-    int height = 0;
-    cout << "\nDiameter of binary tree: " << calcDiameter(root, &height);
+    int d = 0;
+    cout << "\nDiameter of binary tree: " << calcDiameter(root, d);
 
     return 0;
 }
