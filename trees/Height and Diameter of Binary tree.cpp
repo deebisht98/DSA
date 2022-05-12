@@ -52,6 +52,21 @@ int calcDiameter(Node *root, int &d)
     return 1 + max(lh, rh);
 }
 
+int fastDiameter(Node *root, int *height)
+{
+    if (root == NULL)
+    {
+        *height = 0;
+        return 0;
+    }
+    int lh = 0, rh = 0;
+
+    int lDiameter = fastDiameter(root->left, &lh);
+    int rDiameter = fastDiameter(root->right, &rh);
+    int currDiameter = lh + rh;
+    *height = max(lh, rh) + 1;
+    return max(currDiameter, max(lDiameter, rDiameter));
+}
 int main()
 {
     struct Node *root = new Node(1);
